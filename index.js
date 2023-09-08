@@ -1,18 +1,13 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const dotevn = require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const cookieParser = require("cookie-parser");
 const { requireAuth, checkUser } = require("./middleware/authMiddleware");
-
-const DB_URI =
-  "mongodb+srv://jackwebdev31:jwt1234@cl.6tuquqw.mongodb.net/?retryWrites=true&w=majority";
-
-mongoose
-  .connect(DB_URI)
-  .then(() => app.listen(3000))
-  .catch((err) => console.log(err));
+const connectDB = require("./config/db");
+const port = process.env.PORT || 3000;
 
 const app = express();
+connectDB();
 
 app.set("view engine", "ejs");
 
@@ -31,3 +26,5 @@ app.get("/smoothies", requireAuth, (req, res) => {
 });
 
 app.use(authRoutes);
+
+app.listen(port);
